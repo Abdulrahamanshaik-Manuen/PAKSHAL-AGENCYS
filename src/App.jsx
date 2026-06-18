@@ -9,33 +9,28 @@ import { ProductsPage } from './pages/ProductsPage';
 import { ContactPage } from './pages/ContactPage';
 
 
+const getNormalizedPage = (pathname) => {
+  const cleanPath = pathname.startsWith('/PAKSHAL-AGENCYS')
+    ? pathname.slice('/PAKSHAL-AGENCYS'.length)
+    : pathname;
+
+  if (cleanPath === '/about') return 'about';
+  if (cleanPath === '/gallery') return 'gallery';
+  if (cleanPath === '/products') return 'products';
+  if (cleanPath === '/contact') return 'contact';
+  return 'home';
+};
+
 function App() {
   const [currentPage, setCurrentPage] = useState(() => {
-    const path = window.location.pathname;
-    if (path === '/about') return 'about';
-    if (path === '/gallery') return 'gallery';
-    if (path === '/products') return 'products';
-
-    if (path === '/contact') return 'contact';
-    return 'home';
+    return getNormalizedPage(window.location.pathname);
   });
   const [currentSearch, setCurrentSearch] = useState(() => window.location.search);
 
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname;
       setCurrentSearch(window.location.search);
-      if (path === '/about') {
-        setCurrentPage('about');
-      } else if (path === '/gallery') {
-        setCurrentPage('gallery');
-      } else if (path === '/products') {
-        setCurrentPage('products');
-      } else if (path === '/contact') {
-        setCurrentPage('contact');
-      } else {
-        setCurrentPage('home');
-      }
+      setCurrentPage(getNormalizedPage(window.location.pathname));
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -48,7 +43,10 @@ function App() {
 
     // Update path
     const pathMap = { about: '/about', gallery: '/gallery', products: '/products', contact: '/contact' };
-    const newPath = (pathMap[page] || '/home') + search;
+    const cleanPath = pathMap[page] || '/';
+    const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
+    const newPath = basePrefix + cleanPath + search;
+    
     if (window.location.pathname + window.location.search !== newPath) {
       window.history.pushState({}, '', newPath);
     }
