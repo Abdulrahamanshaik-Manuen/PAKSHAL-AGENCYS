@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      if (window.location.hostname.startsWith('www.')) {
+        window.location.replace(window.location.href.replace('www.', ''));
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,7 +84,7 @@
   <body>
     <div id="root">
       <!-- Fallback content for search engine bots before React mounts -->
-      <div style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;">
+      <div style="opacity: 0.001; pointer-events: none; position: absolute; top: 0; left: 0; z-index: -100; width: 100%; height: auto;">
         <header>
           <h1>Pakshal Agencies | Plywood, Laminates &amp; Hardware Solutions</h1>
           <nav>
