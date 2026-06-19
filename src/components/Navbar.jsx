@@ -16,7 +16,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
 
           {/* Logo Section */}
           <a
-            href="#home"
+            href="/"
             onClick={(e) => handleLinkClick(e, 'home')}
             className="flex-shrink-0 flex items-center gap-2.5 group"
           >
@@ -35,7 +35,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* Home Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="#home"
+                href="/"
                 onClick={(e) => handleLinkClick(e, 'home')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'home' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -49,7 +49,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* About Us Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="#about"
+                href="/about"
                 onClick={(e) => handleLinkClick(e, 'about')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'about' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -63,7 +63,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* Gallery Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="#gallery"
+                href="/gallery"
                 onClick={(e) => handleLinkClick(e, 'gallery')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'gallery' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -102,13 +102,13 @@ export const Navbar = ({ currentPage, onNavigate }) => {
           <div className="hidden xl:flex items-center gap-6">
             {/* Phone link */}
             <a
-              href="tel:+919247449522"
+              href="tel:+919246484452"
               className="flex items-center gap-2 text-slate-800 hover:text-[#38a12c] transition-colors text-sm font-bold"
             >
               <svg className="w-4 h-4 text-[#C9A44C] fill-current" viewBox="0 0 24 24">
                 <path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.3-1.1-.5-2.3-.5-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1z" />
               </svg>
-              92474 49522
+              92464 84452
             </a>
           </div>
 
@@ -134,21 +134,21 @@ export const Navbar = ({ currentPage, onNavigate }) => {
       {isOpen && (
         <div className="xl:hidden bg-gradient-to-b from-[#ebd8a1] to-[#e6d19c] border-t border-black/5 py-4 px-6 flex flex-col gap-3.5 animate-fade-in text-left">
           <a
-            href="#home"
+            href="/"
             onClick={(e) => handleLinkClick(e, 'home')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'home' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
             Home
           </a>
           <a
-            href="#about"
+            href="/about"
             onClick={(e) => handleLinkClick(e, 'about')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'about' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
             About Us
           </a>
           <a
-            href="#gallery"
+            href="/gallery"
             onClick={(e) => handleLinkClick(e, 'gallery')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'gallery' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
@@ -171,10 +171,13 @@ export const Navbar = ({ currentPage, onNavigate }) => {
           </a>
           <div className="h-[1px] bg-black/10 my-1" />
           <a
-            href="tel:+919247449522"
+            href="tel:+919246484452"
             className="text-sm font-bold text-slate-900 flex items-center gap-2 py-1"
           >
-            📞 92474 49522
+            <svg className="w-4 h-4 text-[#C9A44C] fill-current shrink-0" viewBox="0 0 24 24">
+              <path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.3-1.1-.5-2.3-.5-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1z" />
+            </svg>
+            <span>92464 84452</span>
           </a>
         </div>
       )}

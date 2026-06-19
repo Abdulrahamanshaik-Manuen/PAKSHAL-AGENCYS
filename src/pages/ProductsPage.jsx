@@ -1002,7 +1002,7 @@ const SPREADS = [
 
 export const ProductsPage = ({ onNavigate, search }) => {
   useDocumentMetadata(
-    "Modular Kitchen Fittings, Cabinet Hardware & Plywood Range | Pakshal Agencies",
+    "Plywood, Cabinet Fittings & Kitchen Accessories | Pakshal",
     "Explore our extensive catalog of Hettich, Ebco, Dorset, and Hafele modular kitchen accessories, drawer channels, tandem boxes, and premium doors."
   );
 

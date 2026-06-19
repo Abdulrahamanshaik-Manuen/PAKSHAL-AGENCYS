@@ -71,7 +71,7 @@ const ContactInfoCard = ({ label, icon, children, href }) => {
 
 export const ContactPage = () => {
   useDocumentMetadata(
-    "Contact Pakshal Agencies | Showroom Location & Dealership Inquiry",
+    "Contact Pakshal Agencies | Goshamahal Showroom",
     "Visit our experience center at Goshamahal, Hyderabad. Register as a dealer, request direct wholesale quotes, or call us at 92464 84452."
   );
 

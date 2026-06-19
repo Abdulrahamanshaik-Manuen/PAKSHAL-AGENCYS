@@ -7,7 +7,7 @@ import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 
 export const AboutPage = ({ onNavigateHome }) => {
   useDocumentMetadata(
-    "About Pakshal Agencies | Hyderabad's Premier Plywood & Hardware Distributor",
+    "About Pakshal | Plywood & Hardware Distributor",
     "Learn about Pakshal Agencies, a trusted distributor of premium plywood, veneers, decorative laminates, and luxury furniture fittings in Hyderabad since 2011."
   );
 
