@@ -7,11 +7,11 @@ import hafeleLogo from '../assets/hafele-logo.png';
 
 export const Brands = () => {
   const brandLogos = [
-    { name: 'Ebco', src: ebcoLogo },
-    { name: 'Hettich', src: hettichLogo },
-    { name: 'Godrej', src: godrejLogo },
-    { name: 'Dorset', src: dorsetLogo },
-    { name: 'Häfele', src: hafeleLogo }
+    { name: 'Ebco', src: ebcoLogo, url: 'https://www.ebco.in' },
+    { name: 'Hettich', src: hettichLogo, url: 'https://www.hettich.com' },
+    { name: 'Godrej', src: godrejLogo, url: 'https://www.godrej.com' },
+    { name: 'Dorset', src: dorsetLogo, url: 'https://www.dorsetindia.com' },
+    { name: 'Häfele', src: hafeleLogo, url: 'https://www.hafeleindia.com' }
   ];
 
   // Duplicate the brand list to create a seamless looping marquee
@@ -39,17 +39,20 @@ export const Brands = () => {
           {/* Scrolling Track */}
           <div className="animate-marquee flex gap-6 w-max">
             {marqueeLogos.map((brand, idx) => (
-              <div
+              <a
                 key={idx}
-                className="flex-none w-[180px] sm:w-[200px] h-24 bg-white flex items-center justify-center rounded-2xl border border-slate-200/80 p-5 shadow-[0_2px_8px_rgba(0,0,0,0.015)]"
+                href={brand.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-none w-[180px] sm:w-[200px] h-24 bg-white flex items-center justify-center rounded-2xl border border-slate-200/80 p-5 shadow-[0_2px_8px_rgba(0,0,0,0.015)] hover:border-[#38a12c]/40 hover:-translate-y-0.5 transition-all duration-300 block"
               >
                 <img
                   src={brand.src}
                   alt={`${brand.name} Logo`}
-                  className="max-h-12 max-w-[85%] object-contain select-none pointer-events-none mix-blend-multiply"
+                  className="max-h-12 max-w-[85%] object-contain select-none mix-blend-multiply"
                   loading="lazy"
                 />
-              </div>
+              </a>
             ))}
           </div>
         </div>

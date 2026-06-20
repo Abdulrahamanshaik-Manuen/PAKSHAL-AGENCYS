@@ -6,6 +6,7 @@ import { Brands } from '../components/Brands';
 import { Categories } from '../components/Categories';
 import { WhyChooseUs } from '../components/WhyChooseUs';
 import { FeaturedProducts } from '../components/FeaturedProducts';
+import { DetailedContent } from '../components/DetailedContent';
 import { Contact } from '../components/Contact';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 
@@ -37,6 +38,9 @@ export const HomePage = ({ onNavigateAbout, onNavigate }) => {
 
       {/* Featured Products Horizontal Slider */}
       <FeaturedProducts />
+
+      {/* Detailed supply info, FAQs, internal/external links, and social shares for SEO */}
+      <DetailedContent onNavigate={onNavigate} />
 
       {/* Contact Section */}
       <Contact />

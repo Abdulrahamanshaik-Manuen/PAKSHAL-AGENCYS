@@ -1,6 +1,7 @@
 import React from 'react';
 
 export const Footer = ({ onNavigate }) => {
+  const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
   const handleLinkClick = (e, href) => {
     if (href.startsWith('#') && onNavigate) {
       e.preventDefault();
@@ -98,12 +99,12 @@ export const Footer = ({ onNavigate }) => {
             </div>
             <ul className="flex flex-col gap-2.5 text-xs sm:text-[13px]">
               {[
-                { name: 'Plywood', href: '/products' },
-                { name: 'Laminates', href: '/products' },
-                { name: 'Hardware Fittings', href: '/products' },
-                { name: 'Doors', href: '/products' },
-                { name: 'Kitchen Accessories', href: '/products' },
-                { name: 'All Products', href: '/products' }
+                { name: 'Plywood', href: `${basePrefix}/products` },
+                { name: 'Laminates', href: `${basePrefix}/products` },
+                { name: 'Hardware Fittings', href: `${basePrefix}/products` },
+                { name: 'Doors', href: `${basePrefix}/products` },
+                { name: 'Kitchen Accessories', href: `${basePrefix}/products` },
+                { name: 'All Products', href: `${basePrefix}/products` }
               ].map((link) => (
                 <li key={link.name}>
                   <a 
@@ -132,7 +133,7 @@ export const Footer = ({ onNavigate }) => {
               {['Ebco', 'Hettich', 'Godrej', 'Dorset', 'Hafele'].map((link) => (
                 <li key={link}>
                   <a 
-                    href="/#brands" 
+                    href={`${basePrefix}/#brands`} 
                     onClick={(e) => handleLinkClick(e, '/#brands')}
                     className="group flex items-center text-[#E6DFD5]/75 hover:text-[#C9A44C] font-semibold transition-all duration-300"
                   >
@@ -155,11 +156,11 @@ export const Footer = ({ onNavigate }) => {
             </div>
             <ul className="flex flex-col gap-2.5 text-xs sm:text-[13px]">
               {[
-                { name: 'About Us', href: '/about', page: 'about' },
-                { name: 'Gallery', href: '/gallery', page: 'gallery' },
-                { name: 'Products', href: '/products', page: 'products' },
-                { name: 'Dealer Zone', href: '/contact', page: 'contact' },
-                { name: 'Contact Us', href: '/contact', page: 'contact' }
+                { name: 'About Us', href: `${basePrefix}/about`, page: 'about' },
+                { name: 'Gallery', href: `${basePrefix}/gallery`, page: 'gallery' },
+                { name: 'Products', href: `${basePrefix}/products`, page: 'products' },
+                { name: 'Dealer Zone', href: `${basePrefix}/contact`, page: 'contact' },
+                { name: 'Contact Us', href: `${basePrefix}/contact`, page: 'contact' }
               ].map((link) => (
                 <li key={link.name}>
                   <a 

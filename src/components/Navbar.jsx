@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export const Navbar = ({ currentPage, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
 
   const handleLinkClick = (e, page, hash = '') => {
     e.preventDefault();
@@ -16,7 +17,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
 
           {/* Logo Section */}
           <a
-            href="/"
+            href={`${basePrefix}/`}
             onClick={(e) => handleLinkClick(e, 'home')}
             className="flex-shrink-0 flex items-center gap-2.5 group"
           >
@@ -35,7 +36,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* Home Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="/"
+                href={`${basePrefix}/`}
                 onClick={(e) => handleLinkClick(e, 'home')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'home' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -49,7 +50,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* About Us Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="/about"
+                href={`${basePrefix}/about`}
                 onClick={(e) => handleLinkClick(e, 'about')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'about' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -63,7 +64,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* Gallery Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="/gallery"
+                href={`${basePrefix}/gallery`}
                 onClick={(e) => handleLinkClick(e, 'gallery')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'gallery' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -78,7 +79,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             {/* Products Page Link */}
             <div className="relative flex flex-col items-center py-2">
               <a
-                href="/products"
+                href={`${basePrefix}/products`}
                 onClick={(e) => handleLinkClick(e, 'products')}
                 className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'products' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
               >
@@ -90,7 +91,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             </div>
 
             <a
-              href="/contact"
+              href={`${basePrefix}/contact`}
               onClick={(e) => handleLinkClick(e, 'contact')}
               className={`text-[11px] font-extrabold uppercase tracking-widest transition-colors ${currentPage === 'contact' ? 'text-[#38a12c]' : 'text-slate-800 hover:text-[#38a12c]'}`}
             >
@@ -134,28 +135,28 @@ export const Navbar = ({ currentPage, onNavigate }) => {
       {isOpen && (
         <div className="xl:hidden bg-gradient-to-b from-[#ebd8a1] to-[#e6d19c] border-t border-black/5 py-4 px-6 flex flex-col gap-3.5 animate-fade-in text-left">
           <a
-            href="/"
+            href={`${basePrefix}/`}
             onClick={(e) => handleLinkClick(e, 'home')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'home' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
             Home
           </a>
           <a
-            href="/about"
+            href={`${basePrefix}/about`}
             onClick={(e) => handleLinkClick(e, 'about')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'about' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
             About Us
           </a>
           <a
-            href="/gallery"
+            href={`${basePrefix}/gallery`}
             onClick={(e) => handleLinkClick(e, 'gallery')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'gallery' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
             Gallery
           </a>
           <a
-            href="/products"
+            href={`${basePrefix}/products`}
             onClick={(e) => handleLinkClick(e, 'products')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'products' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >
@@ -163,7 +164,7 @@ export const Navbar = ({ currentPage, onNavigate }) => {
           </a>
 
           <a
-            href="/contact"
+            href={`${basePrefix}/contact`}
             onClick={(e) => handleLinkClick(e, 'contact')}
             className={`text-sm font-bold uppercase transition-colors ${currentPage === 'contact' ? 'text-[#38a12c]' : 'text-slate-800'}`}
           >

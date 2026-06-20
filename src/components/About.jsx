@@ -71,10 +71,10 @@ export const About = ({ onNavigate }) => {
 
             <div className="flex flex-col gap-4 text-slate-900 text-sm leading-relaxed font-semibold">
               <p>
-                Pakshal Agencies is a leading distributor of premium plywood, laminates, fancy doors, hardware fittings, kitchen accessories, sliding systems and furniture hardware solutions.
+                Pakshal Agencies is a leading distributor and authorized supply partner of <strong>premium plywood, hardware, and interior solutions for modern spaces</strong>. Since 2011, we have catered to the residential and commercial interior sectors by distributing high-quality plywood, decorative laminates, fancy doors, kitchen accessories, sliding systems, and cabinet hardware fittings.
               </p>
               <p>
-                We serve architects, interior designers, builders, contractors, furniture manufacturers &amp; dealers with genuine products, competitive pricing and reliable supply support.
+                We serve architects, interior designers, builders, contractors, and furniture manufacturers with genuine products, competitive pricing, and reliable supply support. Our showroom and warehouse in Goshamahal, Hyderabad showcase our complete range of premium materials engineered to elevate modern spaces with unmatched durability.
               </p>
             </div>
 

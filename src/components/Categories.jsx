@@ -121,50 +121,56 @@ export const Categories = ({ onNavigate }) => {
 
         {/* Categories Grid - 4 Columns on Large Screens */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {categoriesList.map((cat, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                if (onNavigate) {
-                  onNavigate('products', '', `?category=${getCategoryQuery(cat.title)}`);
-                }
-              }}
-              className="group relative rounded-2xl overflow-hidden border border-[#C9A44C]/25 h-36 sm:h-42 flex items-center p-5 sm:p-6 bg-[#f5ecd0] shadow-[0_4px_20px_rgba(201,164,76,0.08)] cursor-pointer select-none"
-            >
-              {/* Background Image on Right Half */}
-              <div
-                className="absolute right-0 top-0 bottom-0 w-[55%] bg-cover bg-center"
-                style={{ backgroundImage: `url('${cat.img}')` }}
-              />
+          {categoriesList.map((cat, idx) => {
+            const query = getCategoryQuery(cat.title);
+            const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
+            return (
+              <a
+                key={idx}
+                href={`${basePrefix}/products?category=${query}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) {
+                    onNavigate('products', '', `?category=${query}`);
+                  }
+                }}
+                className="group relative rounded-2xl overflow-hidden border border-[#C9A44C]/25 h-36 sm:h-42 flex items-center p-5 sm:p-6 bg-[#f5ecd0] shadow-[0_4px_20px_rgba(201,164,76,0.08)] cursor-pointer select-none block"
+              >
+                {/* Background Image on Right Half */}
+                <div
+                  className="absolute right-0 top-0 bottom-0 w-[55%] bg-cover bg-center"
+                  style={{ backgroundImage: `url('${cat.img}')` }}
+                />
 
-              {/* Fading Light Gold Overlay - covering left and fading mid-right */}
-              <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#f5ecd0] via-[#f5ecd0] via-[48%] to-transparent z-5" />
+                {/* Fading Light Gold Overlay - covering left and fading mid-right */}
+                <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#f5ecd0] via-[#f5ecd0] via-[48%] to-transparent z-5" />
 
-              {/* Text & Icon Content */}
-              <div className="relative z-10 text-left flex flex-col justify-between h-full w-[62%]">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-shrink-0">
-                      {cat.icon}
+                {/* Text & Icon Content */}
+                <div className="relative z-10 text-left flex flex-col justify-between h-full w-[62%]">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-shrink-0">
+                        {cat.icon}
+                      </div>
+                      <h3 className="text-[15px] sm:text-base font-black text-[#071330] tracking-tight leading-none">
+                        {cat.title}
+                      </h3>
                     </div>
-                    <h3 className="text-[15px] sm:text-base font-black text-[#071330] tracking-tight leading-none">
-                      {cat.title}
-                    </h3>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-bold leading-normal max-w-[95%] line-clamp-2">
+                      {cat.desc}
+                    </p>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-slate-600 font-bold leading-normal max-w-[95%] line-clamp-2">
-                    {cat.desc}
-                  </p>
-                </div>
 
-                {/* Arrow Icon */}
-                <div className="mt-auto text-[#7A5C12]">
-                  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="3.2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
+                  {/* Arrow Icon */}
+                  <div className="mt-auto text-[#7A5C12]">
+                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="3.2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
