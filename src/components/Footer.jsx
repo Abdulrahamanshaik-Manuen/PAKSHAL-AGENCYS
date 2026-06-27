@@ -18,11 +18,11 @@ export const Footer = ({ onNavigate }) => {
           {/* Column 1 - Brand Info */}
           <div className="flex flex-col gap-5 lg:col-span-3 text-left">
             {/* Logo & Title */}
-            <div className="flex items-center group">
+            <div className="flex items-center">
               <img 
                 src={pakshallogo} 
                 alt="Pakshal Agencies Logo" 
-                className="h-48 sm:h-52 lg:h-56 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] -ml-2" 
+                className="h-48 sm:h-52 lg:h-56 w-auto object-contain -ml-2" 
               />
             </div>
 
@@ -76,7 +76,7 @@ export const Footer = ({ onNavigate }) => {
                   onClick={(e) => {
                     if (social.href.startsWith('#')) handleLinkClick(e, social.href);
                   }}
-                  className="w-9 h-9 rounded-full border border-[#C9A44C]/35 hover:border-[#38a12c] flex items-center justify-center text-[#C9A44C] hover:text-[#38a12c] hover:bg-[#38a12c]/10 bg-transparent transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
+                  className="w-9 h-9 rounded-full border border-white/30 hover:border-[#C9A44C] flex items-center justify-center text-white hover:text-[#C9A44C] hover:bg-[#C9A44C]/10 bg-transparent transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -202,20 +202,20 @@ export const Footer = ({ onNavigate }) => {
             <div className="flex flex-col gap-4">
               {/* Phone Card */}
               <div className="flex gap-3 items-start py-1">
-                <div className="text-[#38a12c] mt-0.5">
+                <div className="text-[#C9A44C] mt-0.5">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.387a20.373 20.373 0 01-7.108-7.108c-.155-.44.01-1.274.387-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                   </svg>
                 </div>
                 <div className="flex flex-col text-left">
-                  <a href="tel:+919247449522" className="text-[#38a12c] font-bold text-sm tracking-wide hover:underline">92474 49522</a>
+                  <a href="tel:+919247449522" className="text-white hover:text-[#C9A44C] font-bold text-sm tracking-wide transition-colors hover:underline">92474 49522</a>
                   <span className="text-[#E6DFD5]/40 text-[10px] font-medium mt-0.5">(Mon - Sat: 10:00 AM - 7:00 PM)</span>
                 </div>
               </div>
 
               {/* Email Card */}
               <div className="flex gap-3 items-start py-1">
-                <div className="text-[#38a12c] mt-0.5">
+                <div className="text-[#C9A44C] mt-0.5">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                   </svg>
@@ -225,7 +225,7 @@ export const Footer = ({ onNavigate }) => {
 
               {/* Address Card */}
               <div className="flex gap-3 items-start py-1">
-                <div className="text-[#38a12c] mt-0.5">
+                <div className="text-[#C9A44C] mt-0.5">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1115 0z" />
