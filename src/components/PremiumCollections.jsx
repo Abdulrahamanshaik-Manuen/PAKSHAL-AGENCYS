@@ -35,9 +35,53 @@ const COLLECTIONS = [
   }
 ];
 
+const getFallbackImage = (id) => {
+  switch (id) {
+    case 'col1': return marinePlywood;
+    case 'col2': return veneers;
+    case 'col3': return laminates;
+    case 'col4': return hardwareFittings;
+    case 'col5': return doors;
+    default: return laminates;
+  }
+};
+
 export const PremiumCollections = () => {
   const [activeIndex, setActiveIndex] = useState(2); // Middle index (Laminates) is active by default
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const [collectionsList, setCollectionsList] = useState([]);
+
+  // Fetch collections from API or fallback to default static list
+  useEffect(() => {
+    const loadCollections = async () => {
+      try {
+        const res = await fetch('/api/collections');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            const processed = data.map(item => ({
+              ...item,
+              displayImage: item.image || getFallbackImage(item.id)
+            }));
+            setCollectionsList(processed);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error loading collections:', error);
+      }
+      
+      // Fallback
+      setCollectionsList(COLLECTIONS.map((c, i) => ({
+        id: `col${i+1}`,
+        title: c.title,
+        subtitle: c.subtitle,
+        displayImage: c.image
+      })));
+    };
+
+    loadCollections();
+  }, []);
 
   // Update width on resize for responsive coverflow spacing
   useEffect(() => {
@@ -52,7 +96,7 @@ export const PremiumCollections = () => {
 
   const handleCardClick = (index) => {
     if (index === activeIndex) {
-      setActiveIndex((prev) => (prev + 1) % COLLECTIONS.length);
+      setActiveIndex((prev) => (prev + 1) % collectionsList.length);
     } else {
       setActiveIndex(index);
     }
@@ -103,15 +147,15 @@ export const PremiumCollections = () => {
             transformStyle: 'preserve-3d'
           }}
         >
-          {COLLECTIONS.map((item, idx) => {
+          {collectionsList.map((item, idx) => {
             // Calculate distance offset from activeIndex
             let offset = idx - activeIndex;
 
             // Handle wrap-around offsets so transition is continuous
-            if (offset < -Math.floor(COLLECTIONS.length / 2)) {
-              offset += COLLECTIONS.length;
-            } else if (offset > Math.floor(COLLECTIONS.length / 2)) {
-              offset -= COLLECTIONS.length;
+            if (offset < -Math.floor(collectionsList.length / 2)) {
+              offset += collectionsList.length;
+            } else if (offset > Math.floor(collectionsList.length / 2)) {
+              offset -= collectionsList.length;
             }
 
             const isActive = offset === 0;
@@ -136,7 +180,7 @@ export const PremiumCollections = () => {
               >
                 {/* Background Full-Cover Image */}
                 <img
-                  src={item.image}
+                  src={item.displayImage}
                   alt={item.title}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 brightness-[0.72] group-hover:brightness-[0.76]"
                 />
@@ -161,7 +205,7 @@ export const PremiumCollections = () => {
 
       {/* Pager Dots Navigation */}
       <div className="flex justify-center items-center gap-2.5 mt-8">
-        {COLLECTIONS.map((_, idx) => (
+        {collectionsList.map((_, idx) => (
           <button
             key={idx}
             onClick={() => handleDotClick(idx)}

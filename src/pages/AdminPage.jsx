@@ -5,6 +5,24 @@ import {
   UploadCloud, Copy, Sparkles, Calendar, ShieldCheck, X
 } from 'lucide-react';
 
+// Import homepage static image assets
+import marinePlywood from '../assets/homepage-marineplywood.png';
+import veneers from '../assets/veneer2.png';
+import laminates from '../assets/laminates.png';
+import hardwareFittings from '../assets/hardwarefittings.png';
+import doors from '../assets/fancydoors.png';
+
+const getFallbackImage = (id) => {
+  switch (id) {
+    case 'col1': return marinePlywood;
+    case 'col2': return veneers;
+    case 'col3': return laminates;
+    case 'col4': return hardwareFittings;
+    case 'col5': return doors;
+    default: return laminates;
+  }
+};
+
 export const AdminPage = ({ onNavigate }) => {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -14,11 +32,13 @@ export const AdminPage = ({ onNavigate }) => {
   const [authError, setAuthError] = useState('');
 
   // Dashboard content states
-  const [activeTab, setActiveTab] = useState('offers'); // 'offers' | 'media'
+  const [activeTab, setActiveTab] = useState('offers'); // 'offers' | 'media' | 'collections'
   const [offers, setOffers] = useState([]);
   const [images, setImages] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [loadingOffers, setLoadingOffers] = useState(false);
   const [loadingImages, setLoadingImages] = useState(false);
+  const [loadingCollections, setLoadingCollections] = useState(false);
 
   // Form states
   const [showOfferForm, setShowOfferForm] = useState(false);
@@ -34,9 +54,18 @@ export const AdminPage = ({ onNavigate }) => {
     image: ''
   });
 
+  const [showCollectionForm, setShowCollectionForm] = useState(false);
+  const [currentCollection, setCurrentCollection] = useState({
+    id: '',
+    title: '',
+    subtitle: '',
+    image: ''
+  });
+
   // Action / Feedback states
   const [notification, setNotification] = useState(null); // { type: 'success'|'error', message: '' }
   const [isSavingOffer, setIsSavingOffer] = useState(false);
+  const [isSavingCollection, setIsSavingCollection] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null); // For offers deletion
   const [deleteImageConfirmName, setDeleteImageConfirmName] = useState(null); // For images deletion
@@ -107,16 +136,36 @@ export const AdminPage = ({ onNavigate }) => {
     }
   }, []);
 
+  // Fetch collections (homepage carousel)
+  const fetchCollections = useCallback(async () => {
+    setLoadingCollections(true);
+    try {
+      const res = await fetch('/api/collections');
+      if (res.ok) {
+        const data = await res.json();
+        setCollections(data);
+      } else {
+        showNotification('error', 'Failed to load homepage collections.');
+      }
+    } catch (err) {
+      showNotification('error', 'Error connecting to database.');
+      console.error(err);
+    } finally {
+      setLoadingCollections(false);
+    }
+  }, []);
+
   // Load dashboard data if authenticated
   useEffect(() => {
     if (isAuthenticated) {
       const timer = setTimeout(() => {
         fetchOffers();
         fetchImages();
+        fetchCollections();
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, fetchOffers, fetchImages]);
+  }, [isAuthenticated, fetchOffers, fetchImages, fetchCollections]);
 
   // Handle offer submission (create or edit)
   const handleOfferSubmit = async (e) => {
@@ -176,6 +225,44 @@ export const AdminPage = ({ onNavigate }) => {
     }
   };
 
+  // Handle homepage carousel collection submit (edit only)
+  const handleCollectionSubmit = async (e) => {
+    e.preventDefault();
+    if (!currentCollection.title || !currentCollection.subtitle) {
+      showNotification('error', 'Title and Subtitle are required.');
+      return;
+    }
+
+    setIsSavingCollection(true);
+    try {
+      const res = await fetch(`/api/collections/${currentCollection.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentCollection)
+      });
+
+      if (res.ok) {
+        showNotification('success', 'Collection item successfully updated!');
+        setShowCollectionForm(false);
+        fetchCollections();
+      } else {
+        let errorMessage = 'Failed to update collection.';
+        try {
+          const errData = await res.json();
+          errorMessage = errData.error || errorMessage;
+        } catch (e) {
+          errorMessage = `Server error (${res.status}): ${res.statusText || 'Bad Gateway'}`;
+        }
+        showNotification('error', errorMessage);
+      }
+    } catch (err) {
+      showNotification('error', 'Network error. Failed to save changes.');
+      console.error(err);
+    } finally {
+      setIsSavingCollection(false);
+    }
+  };
+
   // Handle image file upload
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -198,11 +285,14 @@ export const AdminPage = ({ onNavigate }) => {
 
       if (res.ok) {
         const data = await res.json();
-        showNotification('success', 'Image uploaded successfully to Media Library.');
+        showNotification('success', 'Image uploaded successfully to Cloudinary.');
         fetchImages();
-        // Automatically set the offer form image path to this newly uploaded image if form is open
+        // Automatically set the image path if forms are open
         if (showOfferForm) {
           setCurrentOffer(prev => ({ ...prev, image: data.imageUrl }));
+        }
+        if (showCollectionForm) {
+          setCurrentCollection(prev => ({ ...prev, image: data.imageUrl }));
         }
       } else {
         let errorMessage = 'Failed to upload image.';
@@ -337,7 +427,7 @@ export const AdminPage = ({ onNavigate }) => {
   // RENDER: Admin Dashboard Dashboard
   // ----------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-slate-800 select-none text-left pt-14 pb-20 font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-slate-800 select-none text-left pt-24 pb-20 font-sans">
       
       {/* Toast Notification */}
       {notification && (
@@ -356,23 +446,15 @@ export const AdminPage = ({ onNavigate }) => {
       )}
 
       {/* Header Container */}
-      <div className="w-full bg-[#0F5C3B] border-b-2 border-[#C9A44C] py-6 px-4 sm:px-6 lg:px-8 relative text-white">
-        {/* Decorative elements */}
-        <div className="absolute right-0 bottom-0 top-0 w-[30%] opacity-15 pointer-events-none select-none">
-          <svg className="w-full h-full text-white" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,100 C40,70 60,30 100,0 L100,100 Z" fill="currentColor" />
-          </svg>
-        </div>
-
+      <div className="w-full bg-[#FAF8F5] border-b border-[#C9A44C]/25 py-6 px-4 sm:px-6 lg:px-8 text-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 text-[#C9A44C] font-bold text-[9px] tracking-[0.3em] uppercase">
-              <span className="w-5 h-[1px] bg-[#C9A44C]" />
               CONTROL PANEL
             </div>
-            <h1 className="text-3xl font-black tracking-tight mt-1 flex items-center gap-2.5">
+            <h1 className="text-3xl font-black tracking-tight mt-1 flex items-center gap-2.5 text-slate-900">
               <span>Pakshal Agencies</span>
-              <span className="bg-[#C9A44C] text-slate-950 text-[10px] py-1 px-2.5 rounded-full font-black uppercase tracking-wider">
+              <span className="bg-[#0F5C3B] text-white text-[10px] py-1 px-2.5 rounded-full font-black uppercase tracking-wider">
                 Admin
               </span>
             </h1>
@@ -381,14 +463,14 @@ export const AdminPage = ({ onNavigate }) => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={handleExit}
-              className="px-4 py-2.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-stone-200 font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-slate-750 font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Exit to Website
             </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2.5 bg-[#FAF2DF]/10 hover:bg-[#FAF2DF]/20 border border-[#C9A44C]/30 text-[#C9A44C] font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2.5 bg-red-50 hover:bg-red-100 border border-red-200/50 text-red-600 font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               Log Out
@@ -458,6 +540,17 @@ export const AdminPage = ({ onNavigate }) => {
             >
               <ImageIcon className="w-4 h-4" />
               Media Library ({images.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('collections')}
+              className={`pb-4 px-4 font-black text-[11px] uppercase tracking-widest border-b-2 flex items-center gap-2 cursor-pointer transition-all ${
+                activeTab === 'collections' 
+                  ? 'border-[#0F5C3B] text-[#0F5C3B]' 
+                  : 'border-transparent text-stone-500 hover:text-stone-850'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              Manage Carousel (5)
             </button>
           </div>
 
@@ -750,6 +843,70 @@ export const AdminPage = ({ onNavigate }) => {
             )}
           </div>
         )}
+
+        {/* TAB CONTENT: Homepage Carousel (Collections) */}
+        {activeTab === 'collections' && (
+          <div>
+            {loadingCollections ? (
+              <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
+                <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+                <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">Loading collections...</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {collections.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="bg-[#F8F6F2] border border-[#C9A44C]/25 rounded-[2.2rem] overflow-hidden flex flex-col justify-between shadow-sm relative group hover:shadow-md transition-all duration-300 min-h-[360px]"
+                  >
+                    <div className="p-6 pb-2 relative z-10">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="px-2.5 py-1 bg-[#C9A44C]/15 text-[#7A5C12] rounded-full text-[9px] font-black uppercase tracking-wider border border-[#C9A44C]/30">
+                          SLIDE ID: {item.id.toUpperCase()}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-black text-slate-800 tracking-tight uppercase mt-4 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-stone-550 font-bold text-xs leading-relaxed">
+                        {item.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Image Preview space */}
+                    <div className="h-44 bg-stone-150 border-t border-b border-[#C9A44C]/10 relative overflow-hidden flex items-center justify-center">
+                      <img 
+                        src={item.image || getFallbackImage(item.id)} 
+                        className="w-full h-full object-cover" 
+                        alt={item.title}
+                      />
+                      {!item.image && (
+                        <div className="absolute top-3 right-3 bg-slate-900/75 backdrop-blur-sm border border-[#C9A44C]/30 px-2 py-0.5 rounded-md text-[8px] font-black text-[#C9A44C] uppercase tracking-wider">
+                          Fallback Active
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Edit Actions footer */}
+                    <div className="p-6 pt-3 bg-stone-50 border-t border-stone-100 flex flex-col gap-3">
+                      <button
+                        onClick={() => {
+                          setCurrentCollection({ ...item });
+                          setShowCollectionForm(true);
+                        }}
+                        className="w-full py-2 bg-[#0F5C3B] hover:bg-[#0a472c] text-white font-extrabold text-[10px] uppercase tracking-wider rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Edit className="w-3.5 h-3.5 text-[#C9A44C]" />
+                        Edit Slide Content
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* CREATE/EDIT OFFER MODAL FORM */}
@@ -926,6 +1083,180 @@ export const AdminPage = ({ onNavigate }) => {
                   ) : (
                     <>
                       Publish Offer
+                      <Sparkles className="w-3.5 h-3.5 text-[#C9A44C]" />
+                    </>
+                  )}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT CAROUSEL COLLECTION MODAL FORM */}
+      {showCollectionForm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-[2.5rem] border border-[#C9A44C]/25 max-w-xl w-full p-6 sm:p-8 relative shadow-2xl text-left overflow-y-auto max-h-[90vh] no-scrollbar">
+            <button 
+              onClick={() => setShowCollectionForm(false)}
+              className="absolute top-5 right-5 text-stone-400 hover:text-stone-600 transition-colors p-1 cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <span className="px-2.5 py-1 bg-[#FAF2DF] text-[#7A5C12] rounded-full text-[9px] font-black uppercase tracking-wider border border-[#C9A44C]/30 inline-block">
+              ✏️ EDITING CAROUSEL SLIDE
+            </span>
+            
+            <h3 className="text-2xl font-black text-[#0F5C3B] tracking-tight uppercase mt-3 mb-1">
+              Edit Coverflow Slide
+            </h3>
+            <p className="text-stone-500 font-bold text-[11px] leading-relaxed mb-6 border-b border-stone-150 pb-4">
+              Update the text and image for this specific product collection. Uploading a new image will save it securely on Cloudinary.
+            </p>
+
+            <form onSubmit={handleCollectionSubmit} className="space-y-4">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Title */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Slide Heading / Collection Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g., LAMINATES"
+                    value={currentCollection.title}
+                    onChange={(e) => setCurrentCollection(prev => ({ ...prev, title: e.target.value }))}
+                    className="w-full bg-slate-50 border border-stone-200 focus:bg-white rounded-xl py-2.5 px-3.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0F5C3B] transition-colors"
+                  />
+                </div>
+
+                {/* Subtitle / Desc */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Subtitle / Description Text *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g., Style That Stands Out"
+                    value={currentCollection.subtitle}
+                    onChange={(e) => setCurrentCollection(prev => ({ ...prev, subtitle: e.target.value }))}
+                    className="w-full bg-slate-50 border border-stone-200 focus:bg-white rounded-xl py-2.5 px-3.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0F5C3B] transition-colors"
+                  />
+                </div>
+
+                {/* Image URL path */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Slide Background Image URL / Cloudinary Path
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g., https://res.cloudinary.com/.../img.jpg"
+                      value={currentCollection.image}
+                      onChange={(e) => setCurrentCollection(prev => ({ ...prev, image: e.target.value }))}
+                      className="flex-1 bg-slate-50 border border-stone-200 focus:bg-white rounded-xl py-2.5 px-3.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0F5C3B] transition-colors"
+                    />
+                    
+                    {images.length > 0 && (
+                      <select
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            setCurrentCollection(prev => ({ ...prev, image: e.target.value }));
+                            e.target.value = ''; // Reset select
+                          }
+                        }}
+                        className="bg-[#FAF2DF]/30 border border-[#C9A44C]/35 rounded-xl px-3 text-[10px] font-black text-[#7A5C12] tracking-wider uppercase focus:outline-none cursor-pointer"
+                      >
+                        <option value="">Quick Select Image</option>
+                        {images.map(img => (
+                          <option key={img.name} value={img.url}>{img.name}</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
+
+                {/* Image Preview in Modal */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Slide Image Preview
+                  </label>
+                  <div className="h-40 w-full bg-stone-100 rounded-2xl border border-stone-200 overflow-hidden flex items-center justify-center relative shadow-inner">
+                    <img
+                      src={currentCollection.image || getFallbackImage(currentCollection.id)}
+                      className="w-full h-full object-cover"
+                      alt="Collection Slide Preview"
+                    />
+                    {!currentCollection.image && (
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <span className="bg-slate-900/80 border border-white/10 px-2.5 py-1 rounded-full text-[9px] font-black text-[#C9A44C] uppercase tracking-wider">
+                          Using Default Static Fallback
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Upload Section in Modal */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Upload New Image directly to Cloudinary
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="file" 
+                      id="modal-file-upload" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={isUploading}
+                    />
+                    <label 
+                      htmlFor="modal-file-upload"
+                      className="py-2.5 px-4 bg-[#0F5C3B]/5 hover:bg-[#0F5C3B]/10 border border-[#0F5C3B]/20 rounded-xl text-[#0F5C3B] font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-3.5 h-3.5 text-[#0F5C3B] animate-spin" />
+                      ) : (
+                        <UploadCloud className="w-3.5 h-3.5 text-[#0F5C3B]" />
+                      )}
+                      {isUploading ? 'Uploading...' : 'Choose Image'}
+                    </label>
+                    <span className="text-[8.5px] font-bold text-stone-400">
+                      Supports JPG, PNG, WEBP. Upload directly sets background URL.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Buttons */}
+              <div className="flex gap-3 pt-6 border-t border-stone-150 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowCollectionForm(false)}
+                  className="flex-1 py-3 bg-stone-105 border border-stone-200 hover:bg-stone-150 text-slate-700 font-extrabold text-[10px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingCollection}
+                  className="flex-1 py-3 bg-[#0F5C3B] hover:bg-[#0a472c] text-white font-black text-[10px] uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  {isSavingCollection ? (
+                    <>
+                      Saving...
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      Save Changes
                       <Sparkles className="w-3.5 h-3.5 text-[#C9A44C]" />
                     </>
                   )}

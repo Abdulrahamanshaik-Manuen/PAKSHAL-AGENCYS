@@ -2,6 +2,31 @@ import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Manually parse CLOUDINARY_URL for robust configuration
+const parseCloudinaryUrl = (url) => {
+  if (!url) return null;
+  const match = url.match(/cloudinary:\/\/([^:]+):([^@]+)@(.+)/);
+  if (match) {
+    return {
+      api_key: match[1],
+      api_secret: match[2],
+      cloud_name: match[3],
+    };
+  }
+  return null;
+};
+
+const cloudinaryConfig = parseCloudinaryUrl(process.env.CLOUDINARY_URL);
+if (cloudinaryConfig) {
+  cloudinary.config({
+    cloud_name: cloudinaryConfig.cloud_name,
+    api_key: cloudinaryConfig.api_key,
+    api_secret: cloudinaryConfig.api_secret,
+    secure: true
+  });
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,14 +65,28 @@ export const upload = multer({
 });
 
 // POST /api/upload
-export const uploadImage = (req, res) => {
+export const uploadImage = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image uploaded' });
     }
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+    
+    // Upload local temporary file to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'pakshal_agencies'
+    });
+    
+    // Delete local temporary file
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    
+    res.json({ imageUrl: result.secure_url });
   } catch (error) {
+    // Make sure we clean up the local file if it exists
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
     res.status(500).json({ error: error.message });
   }
 };

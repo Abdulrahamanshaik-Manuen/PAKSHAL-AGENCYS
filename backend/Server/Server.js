@@ -13,6 +13,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 import offersRoutes from '../Routes/offersRoutes.js';
 import uploadRoutes from '../Routes/uploadRoutes.js';
+import collectionsRoutes from '../Routes/collectionsRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,6 +38,7 @@ app.use('/uploads', express.static(uploadsDir));
 
 // Mount modular routes
 app.use('/api/offers', offersRoutes);
+app.use('/api/collections', collectionsRoutes);
 app.use('/api', uploadRoutes);
 
 app.listen(PORT, () => {
