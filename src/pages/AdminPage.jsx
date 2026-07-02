@@ -273,6 +273,19 @@ export const AdminPage = ({ onNavigate }) => {
       return;
     }
 
+    // Capture previous image values for rollback on upload failure
+    const prevOfferImage = currentOffer.image;
+    const prevCollectionImage = currentCollection.image;
+
+    // Create a local object URL to show an instant preview while uploading
+    const localUrl = URL.createObjectURL(file);
+    if (showOfferForm) {
+      setCurrentOffer(prev => ({ ...prev, image: localUrl }));
+    }
+    if (showCollectionForm) {
+      setCurrentCollection(prev => ({ ...prev, image: localUrl }));
+    }
+
     setIsUploading(true);
     const formData = new FormData();
     formData.append('image', file);
@@ -287,7 +300,7 @@ export const AdminPage = ({ onNavigate }) => {
         const data = await res.json();
         showNotification('success', 'Image uploaded successfully to Cloudinary.');
         fetchImages();
-        // Automatically set the image path if forms are open
+        // Replace temporary local URL with the permanent Cloudinary URL
         if (showOfferForm) {
           setCurrentOffer(prev => ({ ...prev, image: data.imageUrl }));
         }
@@ -303,10 +316,24 @@ export const AdminPage = ({ onNavigate }) => {
           errorMessage = `Server error (${res.status}): ${res.statusText || 'Bad Gateway'}`;
         }
         showNotification('error', errorMessage);
+        // Rollback preview on failure
+        if (showOfferForm) {
+          setCurrentOffer(prev => ({ ...prev, image: prevOfferImage }));
+        }
+        if (showCollectionForm) {
+          setCurrentCollection(prev => ({ ...prev, image: prevCollectionImage }));
+        }
       }
     } catch (err) {
       showNotification('error', 'Network error uploading image.');
       console.error(err);
+      // Rollback preview on failure
+      if (showOfferForm) {
+        setCurrentOffer(prev => ({ ...prev, image: prevOfferImage }));
+      }
+      if (showCollectionForm) {
+        setCurrentCollection(prev => ({ ...prev, image: prevCollectionImage }));
+      }
     } finally {
       setIsUploading(false);
     }
@@ -927,7 +954,7 @@ export const AdminPage = ({ onNavigate }) => {
             <h3 className="text-2xl font-black text-[#0F5C3B] tracking-tight uppercase mt-3 mb-1">
               {offerFormMode === 'create' ? 'Create Promotional Offer' : 'Edit Promotional Offer'}
             </h3>
-            <p className="text-stone-500 font-bold text-[11px] leading-relaxed mb-6 border-b border-stone-150 pb-4">
+            <p className="text-stone-500 font-bold text-[11px] leading-relaxed mb-6 pb-2">
               Fill in the details to publish a new deal or coupon code directly on the user-facing home screen.
             </p>
 
@@ -1055,14 +1082,70 @@ export const AdminPage = ({ onNavigate }) => {
                       </select>
                     )}
                   </div>
-                  <span className="block text-[8.5px] font-bold text-stone-400 mt-1 pl-0.5">
-                    To upload a custom image, close this form, upload to the Media Library, then select it here. Leave empty to use category fallbacks.
-                  </span>
                 </div>
+
+                {/* Upload Section in Modal for Offer */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                    Or Upload Custom Image directly
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="file" 
+                      id="offer-file-upload" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={isUploading}
+                    />
+                    <label 
+                      htmlFor="offer-file-upload"
+                      className="py-2.5 px-4 bg-[#0F5C3B]/5 hover:bg-[#0F5C3B]/10 border border-[#0F5C3B]/20 rounded-xl text-[#0F5C3B] font-extrabold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-3.5 h-3.5 text-[#0F5C3B] animate-spin" />
+                      ) : (
+                        <UploadCloud className="w-3.5 h-3.5 text-[#0F5C3B]" />
+                      )}
+                      {isUploading ? 'Uploading...' : 'Choose Image'}
+                    </label>
+                    <span className="text-[8.5px] font-bold text-stone-400">
+                      Supports JPG, PNG, WEBP. Uploading sets the image path automatically.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Image Preview for Offer */}
+                {currentOffer.image && (
+                  <div className="sm:col-span-2">
+                    <label className="block text-[9px] font-black text-stone-500 uppercase tracking-widest mb-1.5 pl-0.5">
+                      Card Image Preview
+                    </label>
+                    <div className="h-40 w-full bg-stone-100 rounded-2xl border border-stone-200 overflow-hidden flex items-center justify-center relative shadow-inner">
+                      <img
+                        src={currentOffer.image}
+                        className="w-full h-full object-cover"
+                        alt="Offer Card Preview"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://placehold.co/600x400?text=Invalid+Image+URL';
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCurrentOffer(prev => ({ ...prev, image: '' }))}
+                        className="absolute top-2 right-2 bg-red-600 hover:bg-red-750 text-white rounded-lg p-1.5 transition-colors cursor-pointer"
+                        title="Remove image"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Form Buttons */}
-              <div className="flex gap-3 pt-6 border-t border-stone-150 mt-6">
+              <div className="flex gap-3 pt-6 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowOfferForm(false)}
@@ -1112,7 +1195,7 @@ export const AdminPage = ({ onNavigate }) => {
             <h3 className="text-2xl font-black text-[#0F5C3B] tracking-tight uppercase mt-3 mb-1">
               Edit Coverflow Slide
             </h3>
-            <p className="text-stone-500 font-bold text-[11px] leading-relaxed mb-6 border-b border-stone-150 pb-4">
+            <p className="text-stone-500 font-bold text-[11px] leading-relaxed mb-6 pb-2">
               Update the text and image for this specific product collection. Uploading a new image will save it securely on Cloudinary.
             </p>
 
@@ -1236,7 +1319,7 @@ export const AdminPage = ({ onNavigate }) => {
               </div>
 
               {/* Form Buttons */}
-              <div className="flex gap-3 pt-6 border-t border-stone-150 mt-6">
+              <div className="flex gap-3 pt-6 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowCollectionForm(false)}

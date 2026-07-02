@@ -3,6 +3,13 @@ import fs from 'fs';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from backend/.env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Manually parse CLOUDINARY_URL for robust configuration
 const parseCloudinaryUrl = (url) => {
@@ -27,9 +34,6 @@ if (cloudinaryConfig) {
     secure: true
   });
 }
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Maintain identical uploads path relative to the root backend/Server directory
 const uploadsDir = path.resolve(__dirname, '../Server/uploads');
@@ -64,6 +68,37 @@ export const upload = multer({
   }
 });
 
+const dbPath = path.resolve(__dirname, '../Server/data/db.json');
+
+const readDB = () => {
+  try {
+    if (!fs.existsSync(dbPath)) {
+      return { offers: [], collections: [], images: [] };
+    }
+    const data = fs.readFileSync(dbPath, 'utf8');
+    const parsed = JSON.parse(data);
+    if (!parsed.images) {
+      parsed.images = [];
+    }
+    return parsed;
+  } catch (error) {
+    console.error('Error reading DB:', error);
+    return { offers: [], collections: [], images: [] };
+  }
+};
+
+const writeDB = (data) => {
+  try {
+    const dir = path.dirname(dbPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error writing DB:', error);
+  }
+};
+
 // POST /api/upload
 export const uploadImage = async (req, res) => {
   try {
@@ -81,6 +116,17 @@ export const uploadImage = async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
     
+    // Save to db.json
+    const db = readDB();
+    db.images = db.images || [];
+    const newImage = {
+      name: req.file.filename,
+      url: result.secure_url,
+      uploadedAt: Date.now()
+    };
+    db.images.push(newImage);
+    writeDB(db);
+    
     res.json({ imageUrl: result.secure_url });
   } catch (error) {
     // Make sure we clean up the local file if it exists
@@ -94,12 +140,8 @@ export const uploadImage = async (req, res) => {
 // GET /api/images
 export const getImages = (req, res) => {
   try {
-    const files = fs.readdirSync(uploadsDir);
-    const images = files.map(file => ({
-      name: file,
-      url: `/uploads/${file}`,
-      uploadedAt: fs.statSync(path.join(uploadsDir, file)).mtime
-    })).sort((a, b) => b.uploadedAt - a.uploadedAt);
+    const db = readDB();
+    const images = (db.images || []).sort((a, b) => b.uploadedAt - a.uploadedAt);
     res.json(images);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -110,12 +152,16 @@ export const getImages = (req, res) => {
 export const deleteImage = (req, res) => {
   try {
     const filename = req.params.filename;
-    const filePath = path.join(uploadsDir, filename);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      res.json({ message: 'Image deleted successfully' });
+    const db = readDB();
+    db.images = db.images || [];
+    
+    const index = db.images.findIndex(img => img.name === filename);
+    if (index !== -1) {
+      db.images.splice(index, 1);
+      writeDB(db);
+      res.json({ message: 'Image deleted successfully from database' });
     } else {
-      res.status(404).json({ error: 'Image not found' });
+      res.status(404).json({ error: 'Image not found in database' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

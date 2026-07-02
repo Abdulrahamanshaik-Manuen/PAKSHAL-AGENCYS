@@ -71,17 +71,18 @@ export const OffersSection = () => {
 
   const getCardTheme = (index, category = '', offerImage = '') => {
     const cat = category.toLowerCase();
+    const cycleIndex = index % 3;
     
     // Default fallback backgrounds
     let bgOverlay = laminatesBg;
-    if (index === 0 || cat.includes('plywood')) bgOverlay = plywoodBg;
-    else if (index === 2 || cat.includes('hardware') || cat.includes('fitting')) bgOverlay = hardwareBg;
+    if (cycleIndex === 0 || cat.includes('plywood')) bgOverlay = plywoodBg;
+    else if (cycleIndex === 2 || cat.includes('hardware') || cat.includes('fitting')) bgOverlay = hardwareBg;
 
     if (offerImage) {
       bgOverlay = offerImage;
     }
 
-    if (index === 0 || cat.includes('plywood')) {
+    if (cycleIndex === 0 || cat.includes('plywood')) {
       return {
         bgClass: 'from-[#e0efe7] via-[#FAF9F5] to-white border-[#0F5C3B]/20',
         circleBg: 'bg-[#0F5C3B]',
@@ -91,7 +92,7 @@ export const OffersSection = () => {
         bgOverlay
       };
     }
-    if (index === 1 || cat.includes('laminate')) {
+    if (cycleIndex === 1 || cat.includes('laminate')) {
       return {
         bgClass: 'from-[#f7eed9] via-[#FAF9F5] to-white border-[#C9A44C]/20',
         circleBg: 'bg-[#C9A44C]',
@@ -130,7 +131,26 @@ export const OffersSection = () => {
     );
   }
 
-  const displayOffers = offers.slice(0, 3);
+  const displayOffers = offers;
+  const offerCount = displayOffers.length;
+
+  let containerClasses = "lg:col-span-6 relative z-10 p-4 lg:py-6 lg:px-2 gap-4 items-stretch";
+  let cardWidthClass = "";
+
+  if (offerCount <= 3) {
+    containerClasses += " grid";
+    if (offerCount === 1) {
+      containerClasses += " grid-cols-1";
+    } else if (offerCount === 2) {
+      containerClasses += " grid-cols-1 md:grid-cols-2";
+    } else {
+      containerClasses += " grid-cols-1 md:grid-cols-3";
+    }
+    cardWidthClass = "w-full";
+  } else {
+    containerClasses += " flex overflow-x-auto flex-nowrap snap-x snap-mandatory pb-3 custom-scrollbar";
+    cardWidthClass = "w-[260px] md:w-[280px] shrink-0 snap-start";
+  }
 
   return (
     <section className="pt-12 pb-2 px-4 sm:px-6 lg:px-8 bg-white text-left select-none animate-fade-in">
@@ -201,14 +221,14 @@ export const OffersSection = () => {
             </div>
           </div>
 
-          {/* Middle 3 Offers Cards (Cols: 6) */}
-          <div className="lg:col-span-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch p-4 lg:py-6 lg:px-2 relative z-10">
+          {/* Middle Offers Cards (Cols: 6) */}
+          <div className={containerClasses}>
             {displayOffers.map((offer, idx) => {
               const theme = getCardTheme(idx, offer.category, offer.image);
               return (
                 <div 
                   key={offer.id} 
-                  className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center justify-between text-center pt-20 pb-4 px-4 relative overflow-hidden shadow-sm min-h-[380px]`}
+                  className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center justify-between text-center pt-20 pb-4 px-4 relative overflow-hidden shadow-sm min-h-[380px] ${cardWidthClass}`}
                 >
                   {/* Clean, opaque overlay background image at the bottom */}
                   <img 

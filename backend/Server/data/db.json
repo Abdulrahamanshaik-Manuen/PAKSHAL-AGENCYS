@@ -1,5 +1,16 @@
 {
-  "offers": [],
+  "offers": [
+    {
+      "id": "1782974232105",
+      "title": "summer offer",
+      "description": "visit the store and get offer ",
+      "category": "General",
+      "badge": "Limited Time",
+      "validUntil": "5/7/2026",
+      "terms": "conditons apply",
+      "image": ""
+    }
+  ],
   "collections": [
     {
       "id": "col1",
@@ -30,6 +41,23 @@
       "title": "DOORS & ACCESSORIES",
       "subtitle": "Complete Your Interior",
       "image": ""
+    }
+  ],
+  "images": [
+    {
+      "name": "file-1782988538760-618540504.png",
+      "url": "https://res.cloudinary.com/dddmskp5o/image/upload/v1782988545/pakshal_agencies/qpu7y0eut8zyj5no69oq.png",
+      "uploadedAt": 1782988547190
+    },
+    {
+      "name": "file-1782988581090-972555008.png",
+      "url": "https://res.cloudinary.com/dddmskp5o/image/upload/v1782988585/pakshal_agencies/wf7sykgds4kit2rsjzzy.png",
+      "uploadedAt": 1782988586251
+    },
+    {
+      "name": "file-1782989391430-548199405.png",
+      "url": "https://res.cloudinary.com/dddmskp5o/image/upload/v1782989400/pakshal_agencies/v6wqaaxqb92m5lomzhcj.png",
+      "uploadedAt": 1782989401806
     }
   ]
 }
