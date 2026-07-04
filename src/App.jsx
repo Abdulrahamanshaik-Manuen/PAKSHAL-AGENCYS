@@ -7,8 +7,8 @@ import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ContactPage } from './pages/ContactPage';
-import { AdminPage } from './Admin/AdminPage';
-import { LoginForm } from './Admin/LoginForm';
+import { AdminPage } from './pages/Admin/AdminPage';
+import { LoginForm } from './pages/Admin/LoginForm';
 
 
 const getNormalizedPage = (pathname, search = '') => {

@@ -6,11 +6,11 @@ import {
 } from 'lucide-react';
 
 // Import homepage static image assets
-import marinePlywood from '../assets/homepage-marineplywood.png';
-import veneers from '../assets/veneer2.png';
-import laminates from '../assets/laminates.png';
-import hardwareFittings from '../assets/hardwarefittings.png';
-import doors from '../assets/fancydoors.png';
+import marinePlywood from '../../assets/homepage-marineplywood.png';
+import veneers from '../../assets/veneer2.png';
+import laminates from '../../assets/laminates.png';
+import hardwareFittings from '../../assets/hardwarefittings.png';
+import doors from '../../assets/fancydoors.png';
 
 const getFallbackImage = (id) => {
   switch (id) {
