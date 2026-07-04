@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { LogIn } from 'lucide-react';
+import { LogIn, ShieldCheck, LogOut } from 'lucide-react';
 import pakshallogo from '../assets/pakshallogo.png';
 
-export const Navbar = ({ currentPage, onNavigate }) => {
+export const Navbar = ({ currentPage, onNavigate, isAdminAuthenticated }) => {
   const [isOpen, setIsOpen] = useState(false);
   const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
 
@@ -111,13 +111,36 @@ export const Navbar = ({ currentPage, onNavigate }) => {
               92464 84452
             </a>
 
-            <button
-              onClick={() => onNavigate('login')}
-              className="px-4 py-2 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-[11px] font-extrabold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
-            >
-              <LogIn className="w-3.5 h-3.5 text-[#C9A44C]" />
-              Login
-            </button>
+            {isAdminAuthenticated ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onNavigate('admin')}
+                  className="px-4 py-2 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-[11.5px] font-extrabold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#C9A44C]" />
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => {
+                    sessionStorage.removeItem('admin_auth');
+                    onNavigate('home');
+                  }}
+                  className="px-3.5 py-2 bg-[#FAF8F5]/10 border border-slate-700/20 text-slate-800 hover:bg-slate-900/5 hover:border-slate-800/40 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                  title="Logout"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-slate-500" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => onNavigate('login')}
+                className="px-4 py-2 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-[11.5px] font-extrabold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5 text-[#C9A44C]" />
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -188,16 +211,42 @@ export const Navbar = ({ currentPage, onNavigate }) => {
             <span>92464 84452</span>
           </a>
 
-          <button
-            onClick={() => {
-              setIsOpen(false);
-              onNavigate('login');
-            }}
-            className="w-full mt-1.5 py-2.5 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
-          >
-            <LogIn className="w-4 h-4 text-[#C9A44C]" />
-            Login
-          </button>
+          {isAdminAuthenticated ? (
+            <div className="flex flex-col gap-2 mt-1.5">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('admin');
+                }}
+                className="w-full py-2.5 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <ShieldCheck className="w-4 h-4 text-[#C9A44C]" />
+                Dashboard
+              </button>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  sessionStorage.removeItem('admin_auth');
+                  onNavigate('home');
+                }}
+                className="w-full py-2.5 bg-red-600 hover:bg-red-750 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <LogOut className="w-4 h-4 text-white" />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                onNavigate('login');
+              }}
+              className="w-full mt-1.5 py-2.5 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <LogIn className="w-4 h-4 text-[#C9A44C]" />
+              Login
+            </button>
+          )}
         </div>
       )}
     </nav>

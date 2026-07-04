@@ -30,6 +30,9 @@ function App() {
     return getNormalizedPage(window.location.pathname);
   });
   const [currentSearch, setCurrentSearch] = useState(() => window.location.search);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
+    return sessionStorage.getItem('admin_auth') === 'true';
+  });
 
   useEffect(() => {
     const handlePopState = () => {
@@ -40,6 +43,11 @@ function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Synchronize admin auth state on navigation changes
+  useEffect(() => {
+    setIsAdminAuthenticated(sessionStorage.getItem('admin_auth') === 'true');
+  }, [currentPage]);
 
   const handleNavigate = (page, hash = '', search = '') => {
     setCurrentPage(page);
@@ -76,7 +84,7 @@ function App() {
 
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
+      <Navbar currentPage={currentPage} onNavigate={handleNavigate} isAdminAuthenticated={isAdminAuthenticated} />
 
       {currentPage === 'home' && (
         <HomePage onNavigateAbout={() => handleNavigate('about')} onNavigate={handleNavigate} />
