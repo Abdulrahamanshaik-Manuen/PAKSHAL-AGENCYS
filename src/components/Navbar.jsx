@@ -111,7 +111,7 @@ export const Navbar = ({ currentPage, onNavigate, isAdminAuthenticated }) => {
               92464 84452
             </a>
 
-            {isAdminAuthenticated ? (
+            {isAdminAuthenticated && (
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => onNavigate('admin')}
@@ -132,14 +132,6 @@ export const Navbar = ({ currentPage, onNavigate, isAdminAuthenticated }) => {
                   Logout
                 </button>
               </div>
-            ) : (
-              <button
-                onClick={() => onNavigate('login')}
-                className="px-4 py-2 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-[11.5px] font-extrabold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
-              >
-                <LogIn className="w-3.5 h-3.5 text-[#C9A44C]" />
-                Login
-              </button>
             )}
           </div>
 
@@ -211,7 +203,7 @@ export const Navbar = ({ currentPage, onNavigate, isAdminAuthenticated }) => {
             <span>92464 84452</span>
           </a>
 
-          {isAdminAuthenticated ? (
+          {isAdminAuthenticated && (
             <div className="flex flex-col gap-2 mt-1.5">
               <button
                 onClick={() => {
@@ -235,17 +227,6 @@ export const Navbar = ({ currentPage, onNavigate, isAdminAuthenticated }) => {
                 Logout
               </button>
             </div>
-          ) : (
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                onNavigate('login');
-              }}
-              className="w-full mt-1.5 py-2.5 bg-[#0F5C3B] hover:bg-[#0b472e] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <LogIn className="w-4 h-4 text-[#C9A44C]" />
-              Login
-            </button>
           )}
         </div>
       )}
