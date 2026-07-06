@@ -9,10 +9,15 @@
       // Automatically detect base path (e.g., /PAKSHAL-AGENCYS or root /)
       var base = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
       var cleanPath = base ? path.slice(base.length) : path;
-      if (cleanPath === '/login' || cleanPath === '/admin') {
-        window.location.replace(window.location.origin + base + '/?page=' + cleanPath.slice(1));
+      var pageName = cleanPath.replace(/^\//, '');
+      var validPages = ['about', 'gallery', 'products', 'contact', 'admin', 'login'];
+
+      if (validPages.indexOf(pageName) !== -1) {
+        var search = window.location.search;
+        var separator = search ? '&' : '?';
+        window.location.replace(window.location.origin + base + '/' + search + separator + 'page=' + pageName + window.location.hash);
       } else {
-        window.location.replace(window.location.origin + base + '/');
+        window.location.replace(window.location.origin + base + '/' + window.location.search + window.location.hash);
       }
     </script>
   </head>

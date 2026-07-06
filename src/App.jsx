@@ -53,6 +53,26 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Clean up URL query parameters for user-friendly routes on initial mount/reload
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pageParam = params.get('page');
+    if (pageParam && ['about', 'gallery', 'products', 'contact'].includes(pageParam)) {
+      const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
+      const pathMap = { 
+        about: '/about', 
+        gallery: '/gallery', 
+        products: '/products', 
+        contact: '/contact'
+      };
+      const cleanPath = pathMap[pageParam] || '/';
+      params.delete('page');
+      const remainingSearch = params.toString();
+      const searchString = remainingSearch ? `?${remainingSearch}` : '';
+      window.history.replaceState({}, '', basePrefix + cleanPath + searchString + window.location.hash);
+    }
+  }, []);
+
   // Synchronize admin auth state on navigation changes
   useEffect(() => {
     setIsAdminAuthenticated(sessionStorage.getItem('admin_auth') === 'true');
