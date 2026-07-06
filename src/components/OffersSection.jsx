@@ -126,10 +126,7 @@ export const OffersSection = () => {
 
         {/* Clean, rounded inline image (Only rendered if custom image exists) */}
         {theme.bgOverlay && (
-          <div className={suffix === 'single'
-            ? "w-full flex-1 min-h-[160px] md:min-h-[180px] mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10"
-            : "w-full h-32 mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10 shrink-0"
-          }>
+          <div className="w-full h-32 mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10 shrink-0">
             <img
               src={theme.bgOverlay}
               className="w-full h-full object-cover"
