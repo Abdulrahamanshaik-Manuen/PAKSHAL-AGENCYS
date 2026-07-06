@@ -28,8 +28,6 @@ export const AdminPage = ({ onNavigate }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('admin_auth') === 'true';
   });
-  const [passcode, setPasscode] = useState('');
-  const [authError, setAuthError] = useState('');
 
   // Dashboard content states
   const [activeTab, setActiveTab] = useState('offers'); // 'offers' | 'collections'
@@ -68,28 +66,17 @@ export const AdminPage = ({ onNavigate }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null); // For offers deletion
 
-  // Passcode verification
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('/api/admin/verify-passcode', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passcode })
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        sessionStorage.setItem('admin_auth', 'true');
-        setIsAuthenticated(true);
-        setAuthError('');
-        showNotification('success', 'Logged in successfully as Administrator.');
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (onNavigate) {
+        onNavigate('login');
       } else {
-        setAuthError(data.error || 'Invalid administrator passcode. Please try again.');
+        window.history.pushState({}, '', '/login');
+        window.dispatchEvent(new Event('popstate'));
       }
-    } catch (err) {
-      setAuthError('Connection to backend failed. Please verify the server is running.');
     }
-  };
+  }, [isAuthenticated, onNavigate]);
 
   const handleLogout = () => {
     sessionStorage.removeItem('admin_auth');
@@ -382,81 +369,10 @@ export const AdminPage = ({ onNavigate }) => {
   };
 
   // ----------------------------------------------------
-  // RENDER: Passcode Gate
+  // RENDER: Passcode Gate Redirect
   // ----------------------------------------------------
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0b3321] via-[#0F5C3B] to-[#C9A44C]/30 flex flex-col justify-center items-center px-4 font-sans text-left">
-        <div className="max-w-md w-full bg-slate-900/90 border border-[#C9A44C]/35 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-          {/* Subtle gold orb glow */}
-          <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#C9A44C]/10 blur-2xl pointer-events-none" />
-
-          <div className="flex flex-col items-center text-center">
-            {/* Elegant shield circle lock icon */}
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FAF2DF] to-[#ebd8a1] flex items-center justify-center mb-5 shadow-lg border border-[#C9A44C]">
-              <Lock className="w-7 h-7 text-[#0F5C3B]" />
-            </div>
-
-            <h1 className="text-2xl font-black text-[#FAF2DF] tracking-tight uppercase">
-              Pakshal Agencies
-            </h1>
-            <p className="text-[10px] text-[#C9A44C] tracking-[0.25em] font-black uppercase mb-1">
-              ADMIN CONTROL PANEL
-            </p>
-            <p className="text-stone-400 text-xs font-semibold leading-relaxed mt-2 max-w-[280px]">
-              Access restricted to authorized personnel. Please enter your passcode.
-            </p>
-          </div>
-
-          <form onSubmit={handleLogin} className="mt-8 space-y-5">
-            <div>
-              <label className="block text-[10px] font-black text-stone-300 uppercase tracking-widest mb-1.5 pl-1">
-                Security Passcode
-              </label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={passcode}
-                onChange={(e) => setPasscode(e.target.value)}
-                className="w-full bg-slate-950/80 border border-stone-800 text-white rounded-xl py-3 px-4 text-center text-sm font-black focus:outline-none focus:border-[#C9A44C]/70 placeholder-stone-650 transition-colors"
-                autoFocus
-              />
-            </div>
-
-            {authError && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold p-3 rounded-xl flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{authError}</span>
-              </div>
-            )}
-
-            <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={handleExit}
-                className="flex-1 py-3 bg-stone-850 hover:bg-stone-800 border border-stone-800 text-stone-300 font-extrabold text-[10px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                Return to Site
-              </button>
-              <button
-                type="submit"
-                className="flex-1 py-3 bg-gradient-to-r from-[#ebd8a1] to-[#C9A44C] hover:from-[#FAF2DF] hover:to-[#ebd8a1] text-slate-950 font-black text-[10px] uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                Unlock Panel
-                <Unlock className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </form>
-
-          <div className="mt-8 border-t border-stone-850 pt-4 text-center">
-            <span className="text-[9px] font-extrabold text-stone-500 tracking-wider uppercase">
-              Secure Key Cryptographic Gate
-            </span>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   // ----------------------------------------------------
