@@ -41,6 +41,11 @@ app.use('/api/offers', offersRoutes);
 app.use('/api/collections', collectionsRoutes);
 app.use('/api', uploadRoutes);
 
+// Root route handler for server status
+app.get('/', (req, res) => {
+  res.json({ status: "success", message: "Pakshal Agencies Backend Server is running" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
