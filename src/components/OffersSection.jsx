@@ -103,19 +103,10 @@ export const OffersSection = () => {
 
   const renderOfferCard = (offer, idx, suffix = '') => {
     const theme = getCardTheme(idx, offer.category, offer.image);
-
-    // Dynamic card width depending on layout style and offer count
-    let cardWidth = 'w-[260px] md:w-[280px]';
-    if (suffix === 'single') {
-      cardWidth = 'w-full max-w-[500px] lg:max-w-none';
-    } else if (suffix === 'pair') {
-      cardWidth = 'w-[240px] xl:w-[265px]';
-    }
-
     return (
       <div
         key={`${offer.id}-${suffix}`}
-        className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center pt-10 pb-5 px-5 relative overflow-hidden shadow-sm min-h-[380px] shrink-0 ${cardWidth}`}
+        className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center pt-10 pb-5 px-5 relative overflow-hidden shadow-sm min-h-[380px] w-[260px] md:w-[280px] shrink-0`}
       >
         {/* Info Text */}
         <div className="flex flex-col items-center gap-0.5 relative z-10 w-full mt-1">
@@ -135,7 +126,10 @@ export const OffersSection = () => {
 
         {/* Clean, rounded inline image (Only rendered if custom image exists) */}
         {theme.bgOverlay && (
-          <div className="w-full h-32 mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10 shrink-0">
+          <div className={suffix === 'single'
+            ? "w-full flex-1 min-h-[160px] md:min-h-[180px] mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10"
+            : "w-full h-32 mt-4 mb-4 rounded-2xl overflow-hidden border border-stone-200/40 shadow-inner relative z-10 shrink-0"
+          }>
             <img
               src={theme.bgOverlay}
               className="w-full h-full object-cover"
@@ -323,13 +317,9 @@ export const OffersSection = () => {
 
           {/* Middle Offers Cards (Cols: 6) */}
           <div className="lg:col-span-6 relative z-10 p-4 lg:py-6 lg:px-2 overflow-hidden flex items-center">
-            {offerCount === 1 ? (
+            {offerCount <= 1 ? (
               <div className="w-full flex justify-center">
                 {displayOffers.map((offer, idx) => renderOfferCard(offer, idx, 'single'))}
-              </div>
-            ) : offerCount === 2 ? (
-              <div className="w-full flex justify-center gap-4">
-                {displayOffers.map((offer, idx) => renderOfferCard(offer, idx, 'pair'))}
               </div>
             ) : (
               <div
