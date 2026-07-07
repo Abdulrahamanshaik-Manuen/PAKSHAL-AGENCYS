@@ -16,13 +16,13 @@ export const Footer = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
 
           {/* Column 1 - Brand Info */}
-          <div className="flex flex-col gap-5 lg:col-span-3 text-left">
+          <div className="flex flex-col gap-4 lg:col-span-3 text-left">
             {/* Logo & Title */}
             <div className="flex items-center">
               <img 
                 src={pakshallogo} 
                 alt="Pakshal Agencies Logo" 
-                className="h-48 sm:h-52 lg:h-56 w-auto object-contain -ml-2" 
+                className="h-36 sm:h-40 lg:h-44 w-auto object-contain ml-6 sm:ml-8 lg:ml-10" 
               />
             </div>
 
@@ -239,7 +239,7 @@ export const Footer = ({ onNavigate }) => {
         </div>
       </div>
 
-      <div className="w-full bg-[#120A05] text-[#E6DFD5]/60 border-t border-[#C9A44C]/10 mt-10 py-4 font-medium text-xs select-none">
+      <div className="w-full bg-[#120A05] text-[#E6DFD5]/60 border-t border-[#C9A44C]/10 mt-5 py-4 font-medium text-xs select-none">
         <div className="max-w-[98.5%] xl:max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
           <span>&copy; {new Date().getFullYear()} Pakshal Agencies. All Rights Reserved.</span>
         </div>
