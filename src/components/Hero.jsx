@@ -4,7 +4,7 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen lg:h-screen w-full flex items-center overflow-hidden"
+      className="relative min-h-screen w-full flex items-center overflow-hidden"
     >
       {/* Background Image */}
       <div
