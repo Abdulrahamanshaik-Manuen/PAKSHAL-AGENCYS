@@ -2134,16 +2134,19 @@ export const ProductsPage = ({ onNavigate, search }) => {
                                   height: `${(isThinnest ? 72 : 64) * factors.width}px`
                                 }}
                               >
-                                {/* Hotspot */}
-                                <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                {/* Hotspot with Label */}
+                                <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2">
                                   {isSelected ? (
-                                    <span className="relative flex h-4 w-4">
+                                    <span className="relative flex h-4 w-4 shrink-0">
                                       <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping"></span>
                                       <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-600 border-2 border-white"></span>
                                     </span>
                                   ) : (
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-white border-2 border-emerald-500"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-white border-2 border-emerald-500 shrink-0"></span>
                                   )}
+                                  <span className={`text-[11px] font-black uppercase tracking-wider select-none ${isSelected ? 'text-emerald-800 font-extrabold' : 'text-[#533b25]/85'}`}>
+                                    {displayVal}
+                                  </span>
                                 </div>
 
                                 {/* Royal Club Plywood Stamp branding for bottom layer */}
