@@ -23,11 +23,11 @@ export const Brands = () => {
 
         {/* Header Title */}
         <div className="flex items-center justify-center gap-3 w-full max-w-lg">
-          <div className="h-[1.5px] w-12 bg-slate-200 rounded-full" />
-          <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-slate-800 whitespace-nowrap">
+          <div className="hidden sm:block h-[1.5px] w-12 bg-slate-200 rounded-full" />
+          <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-slate-800 text-center px-4">
             AUTHORIZED BRAND PARTNERS
           </h3>
-          <div className="h-[1.5px] w-12 bg-slate-200 rounded-full" />
+          <div className="hidden sm:block h-[1.5px] w-12 bg-slate-200 rounded-full" />
         </div>
 
         {/* Marquee Container */}

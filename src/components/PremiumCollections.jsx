@@ -140,7 +140,7 @@ export const PremiumCollections = () => {
         {/* Horizontal Gold Line flourishes on subtitle */}
         <div className="flex items-center gap-4 mt-3 max-w-lg w-full justify-center">
           <div className="w-12 sm:w-20 h-[1.5px] bg-[#C9A44C]/45" />
-          <p className="text-[11px] sm:text-xs text-slate-550 font-bold uppercase tracking-wider whitespace-nowrap">
+          <p className="text-[11px] sm:text-xs text-slate-555 font-bold uppercase tracking-wider whitespace-normal text-center px-4">
             Wide Range of Plywood, Laminates, Veneers, Hardware & More
           </p>
           <div className="w-12 sm:w-20 h-[1.5px] bg-[#C9A44C]/45" />

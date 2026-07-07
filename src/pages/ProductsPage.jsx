@@ -1603,9 +1603,9 @@ export const ProductsPage = ({ onNavigate, search }) => {
             </div>
             <div className="space-y-2">
               {Object.entries(spread.specs).map(([key, val]) => (
-                <div key={key} className="flex justify-between text-[11px] border-b border-slate-200/60 pb-1.5 last:border-b-0 last:pb-0">
+                <div key={key} className="flex flex-col sm:flex-row sm:justify-between text-[11px] border-b border-slate-200/60 pb-1.5 last:border-b-0 last:pb-0 gap-1 sm:gap-2">
                   <span className="text-slate-400 font-bold uppercase tracking-wider">{key}</span>
-                  <span className="text-slate-900 font-black uppercase">{val}</span>
+                  <span className="text-slate-900 font-black uppercase sm:text-right">{val}</span>
                 </div>
               ))}
             </div>

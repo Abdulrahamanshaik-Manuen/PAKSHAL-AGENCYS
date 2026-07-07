@@ -99,7 +99,7 @@ export const About = ({ onNavigate }) => {
             <img
               src={`${import.meta.env.BASE_URL}about-warehouse.png`}
               alt="Forklift in Timber warehouse"
-              className="relative z-10 w-full h-[500px] object-cover rounded-2xl shadow-xl border border-slate-100"
+              className="relative z-10 w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover rounded-2xl shadow-xl border border-slate-100"
             />
           </div>
         </div>

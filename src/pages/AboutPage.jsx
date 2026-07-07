@@ -346,7 +346,7 @@ export const AboutPage = ({ onNavigateHome }) => {
             OUR JOURNEY IN NUMBERS
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full divide-y md:divide-y-0 md:divide-x divide-[#ebd8a1]/35">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full md:divide-x divide-[#ebd8a1]/35">
             {[
               {
                 value: '10+',
