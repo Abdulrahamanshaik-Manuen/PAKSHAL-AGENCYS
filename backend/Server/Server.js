@@ -5,6 +5,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,9 +68,9 @@ const seedDefaults = async () => {
   }
 };
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { dbName: 'Pakshal_Agencys' })
   .then(() => {
-    console.log('Connected to MongoDB successfully.');
+    console.log('Connected to MongoDB successfully to database: Pakshal_Agencys');
     seedDefaults();
   })
   .catch((err) => {
@@ -117,8 +118,26 @@ app.get('/', (req, res) => {
   res.json({ status: "success", message: "Pakshal Agencies Backend Server is running" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Determine host: if '--host' is passed in process.argv, bind to '0.0.0.0'
+const host = process.argv.includes('--host') ? '0.0.0.0' : 'localhost';
+
+app.listen(PORT, host, () => {
+  console.log(`\nServer is running:`);
+  console.log(`  - Local:   http://localhost:${PORT}`);
+
+  if (host === '0.0.0.0') {
+    const nets = os.networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+        // Skip over non-IPv4 and internal addresses
+        if ((net.family === 'IPv4' || net.family === 4) && !net.internal) {
+          console.log(`  - Network: http://${net.address}:${PORT}`);
+        }
+      }
+    }
+  }
+  console.log('');
 });
+
 
 
