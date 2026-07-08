@@ -117,11 +117,11 @@ export const PremiumCollections = () => {
 
   // Determine spacing based on viewport width
   const getSpacing = () => {
-    if (windowWidth < 640) return 80;
-    if (windowWidth < 768) return 120;
-    if (windowWidth < 1024) return 155;
-    if (windowWidth < 1280) return 190;
-    return 230;
+    if (windowWidth < 640) return 65;
+    if (windowWidth < 768) return 90;
+    if (windowWidth < 1024) return 120;
+    if (windowWidth < 1280) return 150;
+    return 185;
   };
 
   const spacing = getSpacing();
