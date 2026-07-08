@@ -103,10 +103,11 @@ export const OffersSection = () => {
 
   const renderOfferCard = (offer, idx, suffix = '') => {
     const theme = getCardTheme(idx, offer.category, offer.image);
+    const isSingle = suffix === 'single';
     return (
       <div
         key={`${offer.id}-${suffix}`}
-        className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center pt-10 pb-5 px-5 relative overflow-hidden shadow-sm min-h-[380px] w-[260px] md:w-[280px] shrink-0`}
+        className={`bg-gradient-to-b ${theme.bgClass} rounded-[2rem] border border-[#ebd8a1]/30 flex flex-col items-center pt-10 pb-5 px-5 relative overflow-hidden shadow-sm min-h-[380px] ${isSingle ? 'w-full max-w-[540px]' : 'w-[260px] md:w-[280px]'} shrink-0`}
       >
         {/* Info Text */}
         <div className="flex flex-col items-center gap-0.5 relative z-10 w-full mt-1">
