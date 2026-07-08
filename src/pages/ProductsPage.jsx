@@ -1629,11 +1629,11 @@ export const ProductsPage = ({ onNavigate, search }) => {
               {/* Category Dropdown Header */}
               <button
                 onClick={() => toggleCategory(catName)}
-                className="w-full flex items-center justify-between py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 cursor-pointer select-none"
+                className="w-full flex items-center justify-between py-2 text-[12px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 cursor-pointer select-none"
               >
                 <span>{catName}</span>
                 <svg
-                  className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''
+                  className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''
                     }`}
                   fill="none"
                   stroke="currentColor"
@@ -1659,7 +1659,7 @@ export const ProductsPage = ({ onNavigate, search }) => {
                         handleThumbnailClick(idx);
                         setShowSidebar(false);
                       }}
-                      className={`w-full text-left py-2 px-3 rounded-lg text-[11px] transition-all flex items-center justify-between cursor-pointer ${isActive
+                      className={`w-full text-left py-2 px-3 rounded-lg text-[13px] transition-all flex items-center justify-between cursor-pointer ${isActive
                         ? 'bg-[#C9A44C]/10 text-[#C9A44C] font-black'
                         : 'bg-transparent text-slate-600 hover:bg-slate-50/50 hover:text-slate-900'
                         }`}
@@ -1752,15 +1752,15 @@ export const ProductsPage = ({ onNavigate, search }) => {
         </div>
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-6 flex flex-col xl:flex-row gap-8 items-start relative">
+      <div className="max-w-[1280px] mx-auto px-6 flex flex-col xl:flex-row gap-4 items-start relative">
         {/* Desktop Sidebar Navigation */}
-        <aside className="hidden xl:block w-72 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm max-h-[calc(100vh-160px)] flex flex-col overflow-hidden" style={{ transform: 'translateX(-72px)' }}>
+        <aside className="hidden xl:block w-80 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm max-h-[calc(100vh-160px)] flex flex-col overflow-hidden" style={{ transform: 'translateX(-16px)' }}>
           {/* Desktop Title Header */}
           <div className="mb-5 pb-3 border-b border-slate-200/60 flex-shrink-0 text-left">
-            <h3 className="text-xs font-black uppercase tracking-widest text-[#C9A44C]">
+            <h3 className="text-sm font-black uppercase tracking-widest text-[#C9A44C]">
               Catalogue Index
             </h3>
-            <p className="text-[9px] text-slate-400 font-bold uppercase mt-0.5">
+            <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">
               Select Brand to View Page
             </p>
           </div>
@@ -2518,8 +2518,8 @@ export const ProductsPage = ({ onNavigate, search }) => {
           <div className="absolute top-0 bottom-0 left-0 w-80 bg-[#FAF8F5] shadow-2xl p-6 flex flex-col animate-fade-in text-left border-r border-slate-200/50">
             <div className="flex justify-between items-center mb-5 border-b border-slate-200/60 pb-3 flex-shrink-0">
               <div className="flex flex-col text-left">
-                <span className="text-xs font-black uppercase tracking-widest text-[#C9A44C]">Catalogue Index</span>
-                <span className="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Select Brand to View Page</span>
+                <span className="text-sm font-black uppercase tracking-widest text-[#C9A44C]">Catalogue Index</span>
+                <span className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Select Brand to View Page</span>
               </div>
               <button
                 onClick={() => setShowSidebar(false)}

@@ -451,6 +451,7 @@
 }
 
 @media (max-width: 1279px) {
+
   /* Set heights to auto on mobile so contents don't get cropped */
   .page-content {
     height: auto !important;
@@ -459,7 +460,7 @@
   }
 
   /* Hide the 3D book structure and page edge stacks on mobile layout */
-  .book-container > div.absolute {
+  .book-container>div.absolute {
     display: none !important;
   }
 
@@ -485,13 +486,12 @@
 
 /* Realistic Plywood Veneer Texture Gradients */
 .wood-top-grain {
-  background: linear-gradient(90deg, 
-      rgba(224,180,134,1) 0%, 
-      rgba(215,165,115,1) 25%, 
-      rgba(224,180,134,1) 50%, 
-      rgba(209,157,105,1) 75%, 
-      rgba(224,180,134,1) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(224, 180, 134, 1) 0%,
+      rgba(215, 165, 115, 1) 25%,
+      rgba(224, 180, 134, 1) 50%,
+      rgba(209, 157, 105, 1) 75%,
+      rgba(224, 180, 134, 1) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -503,28 +503,23 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: repeating-linear-gradient(
-      90deg,
+  background: repeating-linear-gradient(90deg,
       transparent,
       transparent 15px,
       rgba(0, 0, 0, 0.02) 15px,
-      rgba(0, 0, 0, 0.02) 30px
-  ),
-  repeating-linear-gradient(
-      45deg,
+      rgba(0, 0, 0, 0.02) 30px),
+    repeating-linear-gradient(45deg,
       rgba(255, 255, 255, 0.05) 0px,
       rgba(255, 255, 255, 0.05) 100px,
       transparent 100px,
-      transparent 200px
-  );
+      transparent 200px);
   opacity: 0.85;
   pointer-events: none;
 }
 
 /* Distinctive layered edge of plywood sheets */
 .plywood-layers {
-  background: repeating-linear-gradient(
-      180deg,
+  background: repeating-linear-gradient(180deg,
       #8c5c32,
       #8c5c32 2px,
       #be8b5a 2px,
@@ -532,9 +527,8 @@
       #643c18 5px,
       #643c18 7px,
       #be8b5a 7px,
-      #be8b5a 9px
-  );
-  box-shadow: inset 0 1px 3px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.4);
+      #be8b5a 9px);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* Smooth 3D perspective effect transitions */
@@ -569,7 +563,7 @@
 
 @keyframes dash {
   to {
-      stroke-dashoffset: -1000;
+    stroke-dashoffset: -1000;
   }
 }
 
@@ -579,7 +573,10 @@
   width: 0;
   height: 0;
 }
+
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
