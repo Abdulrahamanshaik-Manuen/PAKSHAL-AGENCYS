@@ -1786,48 +1786,43 @@ export const ProductsPage = ({ onNavigate, search }) => {
         </div>
       </div>
 
-      <div className="max-w-[1360px] mx-auto px-6 flex flex-col xl:flex-row gap-4 items-start relative">
-        {/* Desktop Sidebar Navigation */}
-        <aside 
-          className="catalog-sidebar hidden xl:block w-80 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm h-[600px] flex flex-col overflow-hidden" 
-          style={windowDimensions.width >= 1280 ? {
-            transform: `translateX(${-16 * scale}px) scale(${scale})`,
-            transformOrigin: 'top left'
-          } : { transform: 'translateX(-16px)' }}
+      <div 
+        className="max-w-[1360px] mx-auto px-6 relative"
+        style={windowDimensions.width >= 768 ? {
+          marginBottom: `${marginBot}px`
+        } : {}}
+      >
+        <div 
+          className="flex flex-col xl:flex-row gap-4 items-start relative"
+          style={windowDimensions.width >= 768 ? {
+            width: windowDimensions.width >= 1280 ? '1296px' : '960px',
+            transform: `scale(${scale})`,
+            transformOrigin: 'top center',
+            margin: '0 auto'
+          } : {}}
         >
-          {/* Desktop Title Header */}
-          <div className="mb-5 pb-3 border-b border-slate-200/60 flex-shrink-0 text-left">
-            <h3 className="text-sm font-black uppercase tracking-widest text-[#C9A44C]">
-              Catalogue Index
-            </h3>
-            <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">
-              Select Brand to View Page
-            </p>
-          </div>
-          {renderSidebarContent()}
-        </aside>
+          {/* Desktop Sidebar Navigation */}
+          <aside 
+            className="catalog-sidebar hidden xl:block w-80 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm h-[600px] flex flex-col overflow-hidden" 
+            style={{ transform: 'translateX(-16px)' }}
+          >
+            {/* Desktop Title Header */}
+            <div className="mb-5 pb-3 border-b border-slate-200/60 flex-shrink-0 text-left">
+              <h3 className="text-sm font-black uppercase tracking-widest text-[#C9A44C]">
+                Catalogue Index
+              </h3>
+              <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">
+                Select Brand to View Page
+              </p>
+            </div>
+            {renderSidebarContent()}
+          </aside>
 
-        {/* Main booklet area wrapper */}
-        <div className="flex-1 w-full min-w-0 flex flex-col">
-          {/* The Open Book */}
-          <div className="w-full pb-8 mb-4 overflow-hidden md:overflow-visible">
-            <div 
-              className="book-outer-wrap flex-shrink-0 relative"
-              style={windowDimensions.width >= 768 ? (
-                windowDimensions.width >= 1280 ? {
-                  width: '960px',
-                  transform: `scale(${scale})`,
-                  transformOrigin: 'top left',
-                  marginBottom: `${marginBot}px`
-                } : {
-                  width: '960px',
-                  left: '50%',
-                  transform: `translate(-50%, 0) scale(${scale})`,
-                  transformOrigin: 'top center',
-                  marginBottom: `${marginBot}px`
-                }
-              ) : {}}
-            >
+          {/* Main booklet area wrapper */}
+          <div className="flex-1 w-full min-w-0 flex flex-col">
+            {/* The Open Book */}
+            <div className="w-full pb-8 mb-4 overflow-hidden md:overflow-visible">
+              <div className="book-outer-wrap flex-shrink-0 w-[960px] relative">
               <div className="book-container book-shadow-3d relative">
 
                 {/* Hardcover structural base wrapping the stacks */}
@@ -1926,6 +1921,7 @@ export const ProductsPage = ({ onNavigate, search }) => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Product Overview Section - Interactive Selection Component */}
       {(() => {
