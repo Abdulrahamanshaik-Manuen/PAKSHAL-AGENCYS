@@ -1027,13 +1027,13 @@ export const ProductsPage = ({ onNavigate, search }) => {
   }, []);
 
   const getCatalogScale = () => {
-    if (windowDimensions.width < 320) return { scale: 0.3, marginBot: -420 };
+    if (windowDimensions.width < 320) return { scale: 0.3, marginBot: -420, leftOffset: 0 };
 
-    // Always target the combined width of the sidebar and booklet (1352px)
-    const targetWidth = 1352;
-    const scaleWidth = (windowDimensions.width - 48) / targetWidth;
+    const isMobile = windowDimensions.width < 768;
+    const targetWidth = isMobile ? 960 : 1352;
+    const padding = isMobile ? 32 : 48;
+    const scaleWidth = (windowDimensions.width - padding) / targetWidth;
 
-    // Always target the full height (720px)
     const targetHeight = 720;
     const scaleHeight = (windowDimensions.height - 120) / targetHeight;
 
@@ -1043,12 +1043,15 @@ export const ProductsPage = ({ onNavigate, search }) => {
     const heightReduction = 600 * (1 - scale);
     const marginBot = -heightReduction + 16;
 
-    return { scale, marginBot };
+    const parentContentWidth = Math.min(windowDimensions.width, 1360) - padding;
+    const visualWidth = (isMobile ? 960 : 1320) * scale;
+    const leftOffset = (parentContentWidth - visualWidth) / 2;
+
+    return { scale, marginBot, leftOffset };
   };
 
-  const { scale, marginBot } = getCatalogScale();
-  const parentContentWidth = Math.min(windowDimensions.width, 1360) - 48;
-  const leftOffset = (parentContentWidth - (1320 * scale)) / 2;
+  const { scale, marginBot, leftOffset } = getCatalogScale();
+
 
   const renderHeroTagIcon = (iconName) => {
     switch (iconName) {
@@ -1800,7 +1803,7 @@ export const ProductsPage = ({ onNavigate, search }) => {
         <div
           className="flex flex-row gap-10 items-start relative"
           style={windowDimensions.width >= 320 ? {
-            width: '1320px',
+            width: windowDimensions.width >= 768 ? '1320px' : '960px',
             transform: `scale(${scale}) translateZ(0)`,
             transformOrigin: 'top left',
             left: `${leftOffset}px`,
@@ -1814,7 +1817,7 @@ export const ProductsPage = ({ onNavigate, search }) => {
         >
           {/* Desktop Sidebar Navigation */}
           <aside
-            className="catalog-sidebar w-80 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm h-[600px] flex flex-col overflow-hidden"
+            className="catalog-sidebar hidden md:flex w-80 sticky top-32 flex-shrink-0 bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-slate-200/40 shadow-sm h-[600px] flex-col overflow-hidden"
             style={{ transform: 'translateX(-16px)' }}
           >
             {/* Desktop Title Header */}
@@ -2524,10 +2527,18 @@ export const ProductsPage = ({ onNavigate, search }) => {
           })()}
         </div>
       </div>
-
-
       {/* Floating Action Buttons */}
       <div className="fixed right-6 bottom-8 z-[100] flex flex-col gap-3">
+        {/* Mobile Sidebar Index Toggle */}
+        <button
+          onClick={() => setShowSidebar(true)}
+          className="md:hidden w-14 h-14 bg-[#006e2f] text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-105 transition-transform cursor-pointer"
+          title="Browse Catalogue Index"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
         <a
           href="https://wa.me/919247449522"
           target="_blank"
@@ -2536,7 +2547,7 @@ export const ProductsPage = ({ onNavigate, search }) => {
           title="WhatsApp Support"
         >
           <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.493 4.904 1.495 5.182 0 9.4-4.216 9.403-9.397.001-2.51-1-4.87-2.817-6.649-1.817-1.778-4.23-2.757-6.79-2.758-5.186 0-9.409 4.217-9.412 9.4-.002 1.942.506 3.843 1.472 5.513L2.26 21.53l4.387-1.376zM18.04 14.99c-.32-.16-1.89-.93-2.18-1.04-.3-.1-.51-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.32.48-.48.16-.16.21-.27.32-.48.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.55.08-.84.4-.29.32-1.12 1.1-1.12 2.68s1.15 3.1 1.31 3.32c.16.22 2.27 3.46 5.5 4.86.76.33 1.36.53 1.83.68.77.24 1.47.21 2.03.12.62-.09 1.89-.77 2.15-1.51.26-.74.26-1.38.18-1.51-.08-.13-.3-.21-.62-.37z" />
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.493 4.904 1.495 5.182 0 9.4-4.216 9.403-9.397.001-2.51-1-4.87-2.817-6.649-1.817-1.778-4.23-2.757-6.79-2.758-5.186 0-9.409 4.217-9.412 9.4-.002 1.942.506 3.843 1.472 5.513L2.26 21.53l4.387-1.376zM18.04 14.99c-.32-.16-1.89-.93-2.18-1.04-.3-.1-.51-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.9-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.32.48-.48.16-.16.21-.27.32-.48.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.55.08-.84.4-.29.32-1.12 1.1-1.12 2.68s1.15 3.1 1.31 3.32c.16.22 2.27 3.46 5.5 4.86.76.33 1.36.53 1.83.68.77.24 1.47.21 2.03.12.62-.09 1.89-.77 2.15-1.51.26-.74.26-1.38.18-1.51-.08-.13-.3-.21-.62-.37z" />
           </svg>
         </a>
         <a
@@ -2558,6 +2569,35 @@ export const ProductsPage = ({ onNavigate, search }) => {
           </svg>
         </button>
       </div>
+
+      {/* Mobile Sidebar Slide-over Drawer */}
+      {showSidebar && (
+        <div className="fixed inset-0 z-[130] md:hidden">
+          {/* Backdrop shadow */}
+          <div
+            onClick={() => setShowSidebar(false)}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+          />
+          {/* Slide-over panel */}
+          <div className="absolute top-0 bottom-0 left-0 w-80 bg-[#FAF8F5] shadow-2xl p-6 flex flex-col animate-fade-in text-left border-r border-slate-200/50">
+            <div className="flex justify-between items-center mb-5 border-b border-slate-200/60 pb-3 flex-shrink-0">
+              <div className="flex flex-col text-left">
+                <span className="text-sm font-black uppercase tracking-widest text-[#C9A44C]">Catalogue Index</span>
+                <span className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Select Brand to View Page</span>
+              </div>
+              <button
+                onClick={() => setShowSidebar(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center cursor-pointer transition-colors"
+              >
+                <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {renderSidebarContent()}
+          </div>
+        </div>
+      )}
 
 
 
