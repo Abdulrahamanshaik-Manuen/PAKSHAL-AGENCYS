@@ -1,4 +1,4 @@
-import pakshallogo from '../assets/pakshallogo.png';
+import pakshallogo from '../assets/pakshallogo_new.png';
 
 export const Footer = ({ onNavigate }) => {
   const basePrefix = window.location.pathname.startsWith('/PAKSHAL-AGENCYS') ? '/PAKSHAL-AGENCYS' : '';
@@ -19,10 +19,10 @@ export const Footer = ({ onNavigate }) => {
           <div className="flex flex-col gap-4 lg:col-span-3 text-left">
             {/* Logo & Title */}
             <div className="flex items-center">
-              <img 
-                src={pakshallogo} 
-                alt="Pakshal Agencies Logo" 
-                className="h-36 sm:h-40 lg:h-44 w-auto object-contain ml-6 sm:ml-8 lg:ml-10" 
+              <img
+                src={pakshallogo}
+                alt="Pakshal Agencies Logo"
+                className="h-36 sm:h-40 lg:h-44 w-auto object-contain ml-6 sm:ml-8 lg:ml-10"
               />
             </div>
 

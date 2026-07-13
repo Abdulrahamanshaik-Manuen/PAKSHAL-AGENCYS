@@ -1731,8 +1731,6 @@ export const ProductsPage = ({ onNavigate, search }) => {
         </div>
       )}
 
-
-
       {/* Dynamic Catalog Hero Banner (Full Bleed) */}
       <div className="w-full bg-[#F5EDE0] text-slate-800 relative min-h-[260px] flex items-stretch border-b border-[#FAF2DF] animate-fade-in mb-12 shadow-xs">
         {/* Centered layout container to align contents with page grid */}
